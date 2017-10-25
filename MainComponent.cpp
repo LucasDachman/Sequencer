@@ -5,7 +5,6 @@
   ==============================================================================
 */
 
-#include "StepButton.h"
 #include "Track.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
@@ -75,7 +74,7 @@ public:
         // This will be called when the audio device stops, or when it is being
         // restarted due to a setting change.
 
-		mixerAudioSrc.removeAllInputs();
+		//mixerAudioSrc.removeAllInputs();
 		mixerAudioSrc.releaseResources();
     }
 

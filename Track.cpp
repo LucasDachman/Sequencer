@@ -80,7 +80,7 @@ void Track::openFileButtonClicked()
 		{
 			ScopedPointer<AudioFormatReaderSource> newSource = new AudioFormatReaderSource(reader, true);
 			readerSource = newSource.release();
-			transportSource.setSource(readerSource, 0, nullptr, reader->sampleRate);
+			AudioTransportSource::setSource(readerSource, 0, nullptr, reader->sampleRate);
 			openFileButton.setButtonText(file.getFileName());
 		}
 		else
@@ -113,26 +113,15 @@ void Track::nextStep()
 	stepButtons[currentStepIndex]->toggleCurrent(true);
 	if (stepButtons[currentStepIndex]->getToggleState())
 	{
-		transportSource.setPosition(0);
-		transportSource.start();
+		AudioTransportSource::setPosition(0);
+		AudioTransportSource::start();
 	}
 	currentStepIndex++;
 	currentStepIndex %= numSteps;
 }
 
-// AudioSource Inherited Functions
-void Track::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
-{
-	transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
-}
-
-void Track::releaseResources()
-{
-	transportSource.releaseResources();
-}
-
 void Track::getNextAudioBlock(const AudioSourceChannelInfo & bufferToFill)
 {
-	transportSource.getNextAudioBlock(bufferToFill);
+	AudioTransportSource::getNextAudioBlock(bufferToFill);
 	bufferToFill.buffer->applyGain(trackLevel);
 }

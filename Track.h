@@ -16,11 +16,10 @@
 class Track : public Component,
 	public Slider::Listener,
 	public Button::Listener,
-	public AudioSource
+	public AudioTransportSource
 {
 public:
 	OwnedArray<StepButton> stepButtons;
-	AudioTransportSource transportSource;
 
 	// functions
 	Track(int num_steps);
@@ -49,7 +48,5 @@ private:
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Track)
 
 	// Inherited via AudioSource
-	virtual void prepareToPlay(int samplesPerBlockExpected, double sampleRate) override;
-	virtual void releaseResources() override;
-	virtual void getNextAudioBlock(const AudioSourceChannelInfo & bufferToFill) override;
+	void getNextAudioBlock(const AudioSourceChannelInfo & bufferToFill) override;
 };
