@@ -5,8 +5,11 @@
   ==============================================================================
 */
 
-#include "Track.h"
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "Track.h"
+#include "TransportButtonFactory.h"
+
+class TransportButtonFactory;
 
 class MainContentComponent   : public AudioAppComponent,
 	public HighResolutionTimer,
@@ -21,6 +24,10 @@ public:
 
 		//set bpm
 		BPM = 120;
+
+		// Transport Toolbar
+		addAndMakeVisible(transportToolbar);
+		transportToolbar.addItem(transportButtonFactory, 1);
 
 		// Create Track objs, make visible and add to Mixer
 		for (int track = 0; track < NUM_TRACKS; track++) 
@@ -90,12 +97,13 @@ public:
     {
 		auto r = getBounds();
 		auto topSection = r.removeFromTop(50);
+
+		transportToolbar.setBounds(topSection);
 		
 		int trackHeight = r.getHeight() / NUM_TRACKS;
-		
 		for (int track = 0; track < tracksArray.size(); track++) 
 		{
-			tracksArray[track]->setBounds(0, trackHeight*track, r.getWidth(), trackHeight);
+			tracksArray[track]->setBounds(r.getX(), r.getY() + trackHeight*track, r.getWidth(), trackHeight);
 		}
     }
 
@@ -107,6 +115,8 @@ private:
 
 	OwnedArray<Track> tracksArray;
 	MixerAudioSource mixerAudioSrc;
+	Toolbar transportToolbar;
+	TransportButtonFactory transportButtonFactory;
 	int BPM;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
