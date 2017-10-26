@@ -8,6 +8,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Track.h"
 #include "TransportButtonFactory.h"
+#include "TransportToolbar.h"
 
 class TransportButtonFactory;
 
@@ -53,7 +54,6 @@ public:
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override
     {
 		mixerAudioSrc.prepareToPlay(samplesPerBlockExpected, sampleRate);
-//		Timer::startTimerHz(BPM / 60.0);
     }
 
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
@@ -63,7 +63,6 @@ public:
 
 	void hiResTimerCallback() override
 	{
-		Logger::outputDebugString("Timer Callback!!");
 		for (int tracki = 0; tracki < tracksArray.size(); tracki++)
 		{
 			Track *currentTrack = tracksArray[tracki];
@@ -115,7 +114,7 @@ private:
 
 	OwnedArray<Track> tracksArray;
 	MixerAudioSource mixerAudioSrc;
-	Toolbar transportToolbar;
+	TransportToolbar transportToolbar;
 	TransportButtonFactory transportButtonFactory;
 	int BPM;
 
