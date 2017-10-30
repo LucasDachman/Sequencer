@@ -7,10 +7,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Track.h"
-#include "TransportButtonFactory.h"
-#include "TransportToolbar.h"
-
-class TransportButtonFactory;
+#include "TransportComponent.h"
 
 class MainContentComponent   :	public AudioAppComponent,
 								public Timer
@@ -26,9 +23,8 @@ public:
 		BPM = 120;
 
 		// Transport Toolbar
-		addAndMakeVisible(transportToolbar);
-		transportToolbar.addItem(transportButtonFactory, 1);
-		transportToolbar.setTracks(&tracksArray);
+		addAndMakeVisible(transportComponent);
+		transportComponent.setTracks(&tracksArray);
 
 		// Create Track objs, make visible and add to Mixer
 		for (int track = 0; track < NUM_TRACKS; track++) 
@@ -42,8 +38,8 @@ public:
         setSize (800, 500);
 
 		Timer::startTimer(10);
-		transportToolbar.startTimer(60000 / BPM);
-		transportToolbar.setState(TransportToolbar::TransportState::Playing);
+		transportComponent.startTimer(60000 / BPM);
+		transportComponent.setState(TransportComponent::TransportState::Playing);
     }
 
     ~MainContentComponent()
@@ -87,7 +83,7 @@ public:
 		auto r = getBounds();
 		auto topSection = r.removeFromTop(50);
 
-		transportToolbar.setBounds(topSection);
+		transportComponent.setBounds(topSection);
 		
 		int trackHeight = r.getHeight() / NUM_TRACKS;
 		for (int track = 0; track < tracksArray.size(); track++) 
@@ -104,8 +100,7 @@ private:
 
 	OwnedArray<Track> tracksArray;
 	MixerAudioSource mixerAudioSrc;
-	TransportToolbar transportToolbar;
-	TransportButtonFactory transportButtonFactory;
+	TransportComponent transportComponent;
 	int BPM;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)

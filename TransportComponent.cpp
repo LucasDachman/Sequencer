@@ -9,8 +9,28 @@
 */
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "TransportToolbar.h"
+#include "TransportComponent.h"
 enum TransportState;	
+
+TransportComponent::TransportComponent()
+{
+	playStopButton = new ArrowButton("Start", 0.0, Colours::blue);
+	addAndMakeVisible(playStopButton);
+}
+
+void TransportComponent::paint(Graphics & g)
+{
+	g.fillAll(Colours::lightgrey);
+}
+
+void TransportComponent::resized()
+{
+	int border = 10;
+	auto r = getLocalBounds();
+	auto playButtonArea = r.removeFromLeft(playStopButtonWidth);
+	playStopButton->setBounds(playButtonArea.reduced(border));
+}
+
 
 void TransportComponent::setTracks(OwnedArray<Track> * _trackArray)
 {
