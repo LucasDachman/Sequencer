@@ -20,6 +20,14 @@ TransportComponent::TransportComponent()
 	playStopButton = new ArrowButton("Start", 0.0, Colours::blue);
 	playStopButton->addListener(this);
 	addAndMakeVisible(playStopButton);
+
+	// BPM Slider
+	bpmSlider.setSliderStyle(Slider::SliderStyle::IncDecButtons);
+	bpmSlider.setColour(Slider::textBoxTextColourId, Colours::black);
+	bpmSlider.setRange(minBPM, maxBPM, bpmSliderInterval);
+	bpmSlider.addListener(this);
+	BPM = bpmSlider.getValue();
+	addAndMakeVisible(bpmSlider);
 }
 
 void TransportComponent::paint(Graphics & g)
@@ -31,8 +39,13 @@ void TransportComponent::resized()
 {
 	int border = 10;
 	auto r = getLocalBounds();
+
 	auto playButtonArea = r.removeFromLeft(playStopButtonWidth);
 	playStopButton->setBounds(playButtonArea.reduced(border));
+
+	auto rightSide = r.removeFromRight(r.getWidth() / 2);
+	auto bpmSliderArea = rightSide.removeFromLeft(bpmSliderWidth);
+	bpmSlider.setBounds(bpmSliderArea.reduced(border));
 }
 
 
@@ -70,6 +83,14 @@ void TransportComponent::buttonClicked(Button * button)
 	}
 }
 
+void TransportComponent::sliderValueChanged(Slider * slider)
+{
+	if (slider == &bpmSlider)
+	{
+		setBPM(slider->getValue());
+	}
+}
+
 
 TransportComponent::TransportState TransportComponent::getState()
 {
@@ -79,6 +100,10 @@ TransportComponent::TransportState TransportComponent::getState()
 void TransportComponent::setBPM(int _bpm)
 {
 	BPM = _bpm;
+	if (isTimerRunning())
+	{
+		setState(Playing);
+	}
 }
 
 int TransportComponent::getBPM()

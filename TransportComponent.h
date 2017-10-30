@@ -14,7 +14,8 @@
 
 class TransportComponent :	public GroupComponent,
 							public HighResolutionTimer,
-							Button::Listener
+							Button::Listener,
+							Slider::Listener
 {
 public:
 	enum TransportState
@@ -44,13 +45,20 @@ private:
 	TransportState currentState;
 	OwnedArray<Track> * trackArray;
 	ScopedPointer<ArrowButton> playStopButton;
+	Slider bpmSlider;
 	int BPM;
 
 	const int playStopButtonWidth = 60;
+	const int minBPM = 50;
+	const int maxBPM = 280;
+	const float bpmSliderInterval = 0.5;
+	const int bpmSliderWidth = 150;
+
 
 	// Inherited via HighResolutionTimer
 	virtual void hiResTimerCallback() override;
 
 	// Inherited via Listener
 	virtual void buttonClicked(Button *) override;
+	virtual void sliderValueChanged(Slider *) override;
 };
