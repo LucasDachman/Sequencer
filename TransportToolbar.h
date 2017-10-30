@@ -10,10 +10,12 @@
 
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "Track.h"
 
-class TransportToolbar : public Toolbar
+class TransportToolbar : public Toolbar,
+	public HighResolutionTimer
 {
-
+public:
 	enum TransportState
 	{
 		Starting,
@@ -21,5 +23,18 @@ class TransportToolbar : public Toolbar
 		Stopping,
 		Stopped
 	};
+	
+	// functions
+	void setTracks(OwnedArray <Track> *_trackArray);
+	void setState(TransportState newState);
+	TransportState getState();
+	void buttonClicked(Button * button) override;
 
+private:
+	// members
+	TransportState currentState;
+	OwnedArray<Track> * trackArray;
+
+	// Inherited via HighResolutionTimer
+	virtual void hiResTimerCallback() override;
 };

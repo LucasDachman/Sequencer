@@ -12,9 +12,8 @@
 
 class TransportButtonFactory;
 
-class MainContentComponent   : public AudioAppComponent,
-	public HighResolutionTimer,
-	public Timer
+class MainContentComponent   :	public AudioAppComponent,
+								public Timer
 {
 public:
     //==============================================================================
@@ -29,6 +28,7 @@ public:
 		// Transport Toolbar
 		addAndMakeVisible(transportToolbar);
 		transportToolbar.addItem(transportButtonFactory, 1);
+		transportToolbar.setTracks(&tracksArray);
 
 		// Create Track objs, make visible and add to Mixer
 		for (int track = 0; track < NUM_TRACKS; track++) 
@@ -42,7 +42,8 @@ public:
         setSize (800, 500);
 
 		Timer::startTimer(10);
-		HighResolutionTimer::startTimer(60000 / BPM);
+		transportToolbar.startTimer(60000 / BPM);
+		transportToolbar.setState(TransportToolbar::TransportState::Playing);
     }
 
     ~MainContentComponent()
@@ -60,15 +61,6 @@ public:
     {
 		mixerAudioSrc.getNextAudioBlock(bufferToFill);
     }
-
-	void hiResTimerCallback() override
-	{
-		for (int tracki = 0; tracki < tracksArray.size(); tracki++)
-		{
-			Track *currentTrack = tracksArray[tracki];
-			currentTrack->nextStep();
-		}
-	}
 
 	void timerCallback() override
 	{
@@ -88,8 +80,6 @@ public:
     void paint (Graphics& g) override
     {
         g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-
-        // You can add your drawing code here!
     }
 
     void resized() override
