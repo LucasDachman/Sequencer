@@ -13,7 +13,8 @@
 #include "Track.h"
 
 class TransportComponent :	public GroupComponent,
-							public HighResolutionTimer
+							public HighResolutionTimer,
+							Button::Listener
 {
 public:
 	enum TransportState
@@ -29,6 +30,8 @@ public:
 	void setTracks(OwnedArray <Track> *_trackArray);
 	void setState(TransportState newState);
 	TransportState getState();
+	void setBPM(int _bpm);
+	int getBPM();
 	//void buttonClicked(Button * button) override;
 
 	// Inherited from GroupComponent
@@ -41,9 +44,13 @@ private:
 	TransportState currentState;
 	OwnedArray<Track> * trackArray;
 	ScopedPointer<ArrowButton> playStopButton;
+	int BPM;
 
 	const int playStopButtonWidth = 60;
 
 	// Inherited via HighResolutionTimer
 	virtual void hiResTimerCallback() override;
+
+	// Inherited via Listener
+	virtual void buttonClicked(Button *) override;
 };

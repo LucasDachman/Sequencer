@@ -24,6 +24,7 @@ public:
 
 		// Transport Toolbar
 		addAndMakeVisible(transportComponent);
+		transportComponent.setBPM(BPM);
 		transportComponent.setTracks(&tracksArray);
 
 		// Create Track objs, make visible and add to Mixer
@@ -38,8 +39,7 @@ public:
         setSize (800, 500);
 
 		Timer::startTimer(10);
-		transportComponent.startTimer(60000 / BPM);
-		transportComponent.setState(TransportComponent::TransportState::Playing);
+//		transportComponent.setState(TransportComponent::TransportState::Playing);
     }
 
     ~MainContentComponent()
