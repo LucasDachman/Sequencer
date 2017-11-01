@@ -11,29 +11,19 @@
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Track.h"
+#include "TransportController.h"
+
+class TransportController;
 
 class TransportComponent :	public GroupComponent,
-							public HighResolutionTimer,
 							Button::Listener,
 							Slider::Listener
 {
 public:
-	enum TransportState
-	{
-		Starting,
-		Playing,
-		Stopping,
-		Stopped
-	};
-	
+
 	// functions
 	TransportComponent();
-	void setTracks(OwnedArray <Track> *_trackArray);
-	void setState(TransportState newState);
-	TransportState getState();
-	void setBPM(int _bpm);
-	int getBPM();
-	//void buttonClicked(Button * button) override;
+	TransportComponent(TransportController *);
 
 	// Inherited from GroupComponent
 	void paint(Graphics & g) override;
@@ -42,11 +32,10 @@ public:
 
 private:
 	// members
-	TransportState currentState;
-	OwnedArray<Track> * trackArray;
 	ScopedPointer<ArrowButton> playStopButton;
 	Slider bpmSlider;
-	int BPM;
+
+	TransportController * transportController;
 
 	const int playStopButtonWidth = 60;
 	const int minBPM = 50;
@@ -54,9 +43,8 @@ private:
 	const float bpmSliderInterval = 0.5;
 	const int bpmSliderWidth = 150;
 
-
-	// Inherited via HighResolutionTimer
-	virtual void hiResTimerCallback() override;
+	// Functions
+	void setUp();
 
 	// Inherited via Listener
 	virtual void buttonClicked(Button *) override;

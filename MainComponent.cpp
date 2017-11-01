@@ -14,7 +14,8 @@ class MainContentComponent   :	public AudioAppComponent,
 {
 public:
     //==============================================================================
-    MainContentComponent()
+	MainContentComponent()
+		: transportComponent(&transportController)
     {
         // specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
@@ -22,24 +23,23 @@ public:
 		//set bpm
 		BPM = 120;
 
-		// Transport Toolbar
-		addAndMakeVisible(transportComponent);
-		transportComponent.setBPM(BPM);
-		transportComponent.setTracks(&tracksArray);
-
-		// Create Track objs, make visible and add to Mixer
+		// Create Track objs, make visible and add to array
 		for (int track = 0; track < NUM_TRACKS; track++) 
 		{
 			tracksArray.add(new Track(NUM_STEPS));
 			addAndMakeVisible(tracksArray.getLast());
-			mixerAudioSrc.addInputSource(tracksArray.getLast(), true);
 		}
+		
+		// Transport Toolbar
+		addAndMakeVisible(transportComponent);
+		transportController.setBPM(BPM);
+		transportController.setTracks(&tracksArray);
 
 		// Set the Window Size
         setSize (800, 500);
 
 		Timer::startTimer(10);
-//		transportComponent.setState(TransportComponent::TransportState::Playing);
+		transportController.startTransport();
     }
 
     ~MainContentComponent()
@@ -50,12 +50,12 @@ public:
     //==============================================================================
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override
     {
-		mixerAudioSrc.prepareToPlay(samplesPerBlockExpected, sampleRate);
+		transportController.prepareToPlay(samplesPerBlockExpected, sampleRate);
     }
 
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
     {
-		mixerAudioSrc.getNextAudioBlock(bufferToFill);
+		transportController.getNextAudioBlock(bufferToFill);
     }
 
 	void timerCallback() override
@@ -69,7 +69,7 @@ public:
         // restarted due to a setting change.
 
 		//mixerAudioSrc.removeAllInputs();
-		mixerAudioSrc.releaseResources();
+		transportController.releaseResources();
     }
 
     //==============================================================================
@@ -99,8 +99,9 @@ private:
 	const int NUM_TRACKS = 4;
 
 	OwnedArray<Track> tracksArray;
-	MixerAudioSource mixerAudioSrc;
+	//MixerAudioSource mixerAudioSrc;
 	TransportComponent transportComponent;
+	TransportController transportController;
 	int BPM;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)

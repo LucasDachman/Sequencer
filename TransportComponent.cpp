@@ -10,12 +10,21 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "TransportComponent.h"
-enum TransportState;	
+//enum TransportState;	
 
 TransportComponent::TransportComponent()
 {
-	setState(Stopped);
+	setUp();
+}
 
+TransportComponent::TransportComponent(TransportController * _controller)
+{
+	transportController = _controller;
+	setUp();
+}
+
+void TransportComponent::setUp()
+{
 	// Play Stop Button
 	playStopButton = new ArrowButton("Start", 0.0, Colours::blue);
 	playStopButton->addListener(this);
@@ -26,8 +35,9 @@ TransportComponent::TransportComponent()
 	bpmSlider.setColour(Slider::textBoxTextColourId, Colours::black);
 	bpmSlider.setRange(minBPM, maxBPM, bpmSliderInterval);
 	bpmSlider.addListener(this);
-	BPM = bpmSlider.getValue();
 	addAndMakeVisible(bpmSlider);
+
+	transportController->setBPM(bpmSlider.getValue());
 }
 
 void TransportComponent::paint(Graphics & g)
@@ -48,37 +58,18 @@ void TransportComponent::resized()
 	bpmSlider.setBounds(bpmSliderArea.reduced(border));
 }
 
-
-void TransportComponent::setTracks(OwnedArray<Track> * _trackArray)
-{
-	trackArray = _trackArray;
-}
-
-void TransportComponent::setState(TransportState newState)
-{
-	if (newState == Playing)
-	{
-		startTimer(60000 / BPM);
-	}
-	else if (newState == Stopped)
-	{
-		stopTimer();
-	}
-	currentState = newState;
-}
-
 void TransportComponent::buttonClicked(Button * button)
 {
 	if (button == playStopButton)
 	{
 		Logger::outputDebugString("PlayButtonPressed!!!!");
-		if (currentState == Playing)
+		if (transportController->getState() == TransportController::Playing)
 		{
-			setState(Stopped);
+			transportController->setState(TransportController::Stopped);
 		}
-		else if (currentState == Stopped)
+		else if (transportController->getState() == TransportController::Stopped)
 		{
-			setState(Playing);
+			transportController->setState(TransportController::Playing);
 		}
 	}
 }
@@ -87,35 +78,8 @@ void TransportComponent::sliderValueChanged(Slider * slider)
 {
 	if (slider == &bpmSlider)
 	{
-		setBPM(slider->getValue());
+		transportController->setBPM(slider->getValue());
 	}
 }
 
-
-TransportComponent::TransportState TransportComponent::getState()
-{
-	return currentState;
-}
-
-void TransportComponent::setBPM(int _bpm)
-{
-	BPM = _bpm;
-	if (isTimerRunning())
-	{
-		setState(Playing);
-	}
-}
-
-int TransportComponent::getBPM()
-{
-	return BPM;
-}
-void TransportComponent::hiResTimerCallback()
-{
-	for (int tracki = 0; tracki < trackArray->size(); tracki++)
-	{
-		Track *currentTrack = (*trackArray)[tracki];
-		currentTrack->nextStep();
-	}
-}
 
