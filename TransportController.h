@@ -19,9 +19,7 @@ class TransportController :		public HighResolutionTimer,
 public:
 	enum TransportState
 	{
-		Starting,
 		Playing,
-		Stopping,
 		Stopped
 	};
 
