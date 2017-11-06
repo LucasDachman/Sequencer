@@ -23,7 +23,7 @@ void TransportController::setTracks(OwnedArray<Track> * _trackArray)
 	trackArray = _trackArray;
 	for (int track = 0; track < trackArray->size(); track++) 
 	{
-			addInputSource((*trackArray)[track], true);
+		addInputSource((*trackArray)[track], true);
 	}
 }
 

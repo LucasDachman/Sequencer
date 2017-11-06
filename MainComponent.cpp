@@ -6,104 +6,31 @@
 */
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "Track.h"
-#include "TransportComponent.h"
+#include "SequencerViewComponent.h"
+#include "MidiViewComponent.h"
+#include "SequencerLookAndFeel.h"
 
-class MainContentComponent   :	public AudioAppComponent,
-								public Timer
+class MainContentComponent   :	public TabbedComponent
 {
 public:
     //==============================================================================
 	MainContentComponent()
-		: transportComponent(&transportController)
+		: TabbedComponent(TabbedButtonBar::Orientation::TabsAtTop)
     {
-        // specify the number of input and output channels that we want to open
-        setAudioChannels (2, 2);
-
-		//set bpm
-		BPM = 120;
-
-		// Create Track objs, make visible and add to array
-		for (int track = 0; track < NUM_TRACKS; track++) 
-		{
-			tracksArray.add(new Track(NUM_STEPS));
-			addAndMakeVisible(tracksArray.getLast());
-		}
-		
-		// Transport Toolbar
-		addAndMakeVisible(transportComponent);
-		transportController.setBPM(BPM);
-		transportController.setTracks(&tracksArray);
-
-		// Set the Window Size
-        setSize (800, 500);
-
-		Timer::startTimer(10);
-		transportController.startTransport();
+		setSize(800, 500);
+		setLookAndFeel(&lookAndFeel);
+		addTab("Sequencer View", Colours::white, &sequencerViewComponent, true);
+		addTab("Midi View", lookAndFeel.PRIMARY_COLOUR, &midiViewComponent, true);
     }
-
-    ~MainContentComponent()
-    {
-        shutdownAudio();
-    }
-
-    //==============================================================================
-    void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override
-    {
-		transportController.prepareToPlay(samplesPerBlockExpected, sampleRate);
-    }
-
-    void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
-    {
-		transportController.getNextAudioBlock(bufferToFill);
-    }
-
-	void timerCallback() override
-	{
-		repaint();
-	}
-
-    void releaseResources() override
-    {
-        // This will be called when the audio device stops, or when it is being
-        // restarted due to a setting change.
-
-		//mixerAudioSrc.removeAllInputs();
-		transportController.releaseResources();
-    }
-
-    //==============================================================================
-    void paint (Graphics& g) override
-    {
-        g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-    }
-
-    void resized() override
-    {
-		auto r = getBounds();
-		auto topSection = r.removeFromTop(50);
-
-		transportComponent.setBounds(topSection);
-		
-		int trackHeight = r.getHeight() / NUM_TRACKS;
-		for (int track = 0; track < tracksArray.size(); track++) 
-		{
-			tracksArray[track]->setBounds(r.getX(), r.getY() + trackHeight*track, r.getWidth(), trackHeight);
-		}
-    }
-
 
 private:
     //==============================================================================
-	const int NUM_STEPS = 4;
-	const int NUM_TRACKS = 4;
+	SequencerViewComponent sequencerViewComponent;
+	MidiViewComponent midiViewComponent;
 
-	OwnedArray<Track> tracksArray;
-	//MixerAudioSource mixerAudioSrc;
-	TransportComponent transportComponent;
-	TransportController transportController;
-	int BPM;
-
+	SequencerLookAndFeel lookAndFeel;
+	
+	
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };
 

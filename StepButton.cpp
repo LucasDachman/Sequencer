@@ -15,12 +15,8 @@ StepButton::StepButton(String _name = "Default")
 {
 	name = _name;
 	isCurrent = false;
-	customLookAndFeel = new StepButtonLookAndFeel();
 	setClickingTogglesState(true);
 	setButtonText(name);
-	TextButton::setColour(TextButton::ColourIds::buttonColourId, Colours::royalblue);
-	TextButton::setLookAndFeel(customLookAndFeel);
-
 }
 
 void StepButton::toggleCurrent(bool x)
