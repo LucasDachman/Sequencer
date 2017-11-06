@@ -25,6 +25,8 @@ DISCLAIMED.
 */
 
 #include "MidiViewComponent.h"
+#include "SequencerViewComponent.h"
+
 
 //==============================================================================
 struct MidiDeviceListEntry : ReferenceCountedObject
@@ -142,7 +144,7 @@ private:
 };
 
 //==============================================================================
-MidiViewComponent::MidiViewComponent()
+MidiViewComponent::MidiViewComponent(SequencerViewComponent *s)
 	: midiInputLabel("Midi Input Label", "MIDI Input:"),
 	midiOutputLabel("Midi Output Label", "MIDI Output:"),
 	incomingMidiLabel("Incoming Midi Label", "Received MIDI messages:"),
@@ -153,6 +155,7 @@ MidiViewComponent::MidiViewComponent()
 	midiInputSelector(new MidiDeviceListBox("Midi Input Selector", *this, true)),
 	midiOutputSelector(new MidiDeviceListBox("Midi Input Selector", *this, false))
 {
+	sequencerViewComponent = s;
 	setSize(732, 520);
 
 	addLabelAndSetStyle(midiInputLabel);
@@ -399,6 +402,9 @@ void MidiViewComponent::handleMessage(const Message& msg)
 	midiString << "\n";
 
 	midiMonitor.insertTextAtCaret(midiString);
+
+	sequencerViewComponent->handleMidiMessage(mm);
+
 }
 
 //==============================================================================

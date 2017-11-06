@@ -27,9 +27,11 @@ DISCLAIMED.
 #pragma once
 
 #include "JuceHeader.h"
+#include "Track.h"
 
 //==============================================================================
 
+class SequencerViewComponent;
 class MidiDeviceListBox;
 struct MidiDeviceListEntry;
 
@@ -43,7 +45,7 @@ class MidiViewComponent : public Component,
 {
 public:
 	//==============================================================================
-	MidiViewComponent();
+	MidiViewComponent(SequencerViewComponent *);
 	~MidiViewComponent();
 
 	//==============================================================================
@@ -93,6 +95,7 @@ private:
 	ReferenceCountedArray<MidiDeviceListEntry> midiInputs;
 	ReferenceCountedArray<MidiDeviceListEntry> midiOutputs;
 
+	SequencerViewComponent * sequencerViewComponent;
 	//==============================================================================
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MidiViewComponent)
 };

@@ -28,7 +28,6 @@ Track::Track(int _numSteps)
 
 	// Track Open File Button
 	openFileButton.setLookAndFeel(new LookAndFeel_V4);
-	//openFileButton.setColour(TextButton::ColourIds::buttonColourId, Colours::royalblue);
 	openFileButton.setButtonText("Open");
 	openFileButton.addListener(this);
 	addAndMakeVisible(openFileButton);

@@ -92,6 +92,14 @@ public:
 		}
 	}
 
+	void handleMidiMessage(MidiMessage m)
+	{
+		int area = NUM_TRACKS * NUM_STEPS;
+		int col = m.getNoteNumber() % area;
+		int row = m.getNoteNumber() / area;
+
+		tracksArray[row]->stepButtons[col]->setToggleState(m.isNoteOn(), true);
+	}
 
 private:
 	//==============================================================================

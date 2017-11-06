@@ -15,7 +15,8 @@ class MainContentComponent   :	public TabbedComponent
 public:
     //==============================================================================
 	MainContentComponent()
-		: TabbedComponent(TabbedButtonBar::Orientation::TabsAtTop)
+		: TabbedComponent(TabbedButtonBar::Orientation::TabsAtTop),
+		midiViewComponent(&sequencerViewComponent)
     {
 		setSize(800, 500);
 		setLookAndFeel(&lookAndFeel);
