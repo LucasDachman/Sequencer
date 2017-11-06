@@ -17,7 +17,8 @@ class TransportController;
 
 class TransportComponent :	public GroupComponent,
 							Button::Listener,
-							Slider::Listener
+							Slider::Listener,
+							ComboBox::Listener
 {
 public:
 
@@ -34,6 +35,7 @@ private:
 	// members
 	ScopedPointer<ArrowButton> playStopButton;
 	Slider bpmSlider;
+	ComboBox multiplierBox;
 
 	TransportController * transportController;
 
@@ -49,4 +51,7 @@ private:
 	// Inherited via Listener
 	virtual void buttonClicked(Button *) override;
 	virtual void sliderValueChanged(Slider *) override;
+
+	// Inherited via Listener
+	virtual void comboBoxChanged(ComboBox * comboBoxThatHasChanged) override;
 };

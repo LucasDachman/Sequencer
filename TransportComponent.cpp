@@ -38,11 +38,20 @@ void TransportComponent::setUp()
 	addAndMakeVisible(bpmSlider);
 
 	transportController->setBPM(bpmSlider.getValue());
+
+	// Multiplier ComboBox
+	multiplierBox.addListener(this);
+	multiplierBox.addItem("1x", 1);
+	multiplierBox.addItem("2x", 2);
+	multiplierBox.addItem("4x", 4);
+	multiplierBox.setSelectedId(1);
+	addAndMakeVisible(multiplierBox);
 }
 
 void TransportComponent::paint(Graphics & g)
 {
 	g.fillAll(Colours::lightgrey);
+	g.drawRect(g.getClipBounds());
 }
 
 void TransportComponent::resized()
@@ -56,6 +65,8 @@ void TransportComponent::resized()
 	auto rightSide = r.removeFromRight(r.getWidth() / 2);
 	auto bpmSliderArea = rightSide.removeFromLeft(bpmSliderWidth);
 	bpmSlider.setBounds(bpmSliderArea.reduced(border));
+
+	multiplierBox.setBounds(rightSide.removeFromLeft(60));
 }
 
 void TransportComponent::buttonClicked(Button * button)
@@ -80,6 +91,11 @@ void TransportComponent::sliderValueChanged(Slider * slider)
 	{
 		transportController->setBPM(slider->getValue());
 	}
+}
+
+void TransportComponent::comboBoxChanged(ComboBox * comboBoxThatHasChanged)
+{
+	transportController->setMultiplier(comboBoxThatHasChanged->getSelectedId());
 }
 
 

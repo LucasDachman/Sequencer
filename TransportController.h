@@ -30,6 +30,7 @@ public:
 	void setState(TransportState newState);
 	TransportState getState();
 	void startTransport();
+	void setMultiplier(int);
 
 private:
 	
@@ -37,6 +38,7 @@ private:
 	OwnedArray<Track> * trackArray;
 
 	int BPM;
+	int multiplier;
 	// Inherited via HighResolutionTimer
 	virtual void hiResTimerCallback() override;
 };

@@ -61,7 +61,7 @@ int TransportController::getBPM()
 
 void TransportController::startTransport()
 {
-	startTimer(60000 / BPM);
+	startTimer(60000 / BPM / multiplier);
 }
 
 void TransportController::hiResTimerCallback()
@@ -76,3 +76,8 @@ void TransportController::hiResTimerCallback()
 	}
 }
 
+void TransportController::setMultiplier(int n)
+{
+	multiplier = n;
+	startTransport();
+}
