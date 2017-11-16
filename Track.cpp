@@ -80,8 +80,8 @@ void Track::openFileButtonClicked()
 		if (reader != nullptr) 
 		{
 			ScopedPointer<AudioFormatReaderSource> newSource = new AudioFormatReaderSource(reader, true);
+			AudioTransportSource::setSource(newSource, 0, nullptr, reader->sampleRate);
 			readerSource = newSource.release();
-			AudioTransportSource::setSource(readerSource, 0, nullptr, reader->sampleRate);
 			openFileButton.setButtonText(file.getFileName());
 		}
 		else

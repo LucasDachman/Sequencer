@@ -379,7 +379,7 @@ void MidiViewComponent::handleIncomingMidiMessage(MidiInput* /*source*/, const M
 {
 	// This is called on the MIDI thread
 
-	if (message.isNoteOnOrOff())
+	//if (message.isNoteOnOrOff())
 		postMessage(new MidiCallbackMessage(message));
 }
 

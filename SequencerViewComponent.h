@@ -94,11 +94,11 @@ public:
 
 	void handleMidiMessage(MidiMessage m)
 	{
-		int area = NUM_TRACKS * NUM_STEPS;
+		int area = 16;
 		int col = m.getNoteNumber() % area;
 		int row = m.getNoteNumber() / area;
-
-		tracksArray[row]->stepButtons[col]->setToggleState(m.isNoteOn(), true);
+        if (col < NUM_STEPS && row < NUM_TRACKS)
+		    tracksArray[row]->stepButtons[col]->setToggleState(m.isNoteOn(), true);
 	}
 
 private:
