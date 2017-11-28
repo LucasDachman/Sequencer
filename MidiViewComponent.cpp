@@ -25,7 +25,7 @@ DISCLAIMED.
 */
 
 #include "MidiViewComponent.h"
-#include "SequencerViewComponent.h"
+#include "SequencerViewComponent.cpp"
 
 
 //==============================================================================

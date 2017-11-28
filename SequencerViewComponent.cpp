@@ -98,7 +98,7 @@ public:
 		int col = m.getNoteNumber() % area;
 		int row = m.getNoteNumber() / area;
         if (col < NUM_STEPS && row < NUM_TRACKS)
-		    tracksArray[row]->stepButtons[col]->setToggleState(m.isNoteOn(), true);
+		    tracksArray[row]->stepButtons[col]->setToggleState(m.isNoteOn(), NotificationType::sendNotification);
 	}
 
 private:

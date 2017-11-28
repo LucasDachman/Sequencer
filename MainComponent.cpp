@@ -6,7 +6,7 @@
 */
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "SequencerViewComponent.h"
+#include "SequencerViewComponent.cpp"
 #include "MidiViewComponent.h"
 #include "SequencerLookAndFeel.h"
 
